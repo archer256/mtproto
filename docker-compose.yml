@@ -1,0 +1,25 @@
+version: '3.4'
+
+services:
+  proxy:
+    build:
+      context: .
+      args:
+        DEBIAN_VERSION: ${DEBIAN_VERSION:-buster-slim}
+    restart: ${RESTART_MODE:-always}
+    environment:
+      EXTERNAL_IP: ${EXTERNAL_IP}
+      HTTP_PORT: ${HTTP_PORT:-433}
+      SERVICE_PORT: ${SERVICE_PORT:-2398}
+      SECRET: ${SECRET}
+      N_WORKERS: ${N_WORKERS:-1}
+      MAX_CONN: ${MAX_CONN:-60000}
+      EXTRA_ARGS: ${EXTRA_ARGS:-}
+    volumes:
+      - ${TEMP_DIR:-temp}:/usr/src/app/temp:rw
+    ports:
+      - "${HTTP_PORT:-433}:${HTTP_PORT:-433}"
+
+volumes:
+  temp:
+    driver: local
